@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	// EvKey si used to describe state changes of keyboards, buttons or other key-like devices
+	// EvKey describes the state changes of keyboards, buttons or other key-like devices
 	EvKey EventType = 0x01
 )
 

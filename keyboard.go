@@ -11,6 +11,11 @@ import (
 	"syscall"
 )
 
+var (
+	path     = "/sys/class/input/event%d/device/name"
+	resolved = "/dev/input/event%d"
+)
+
 //
 // Device ...
 //
@@ -33,27 +38,24 @@ func New(devicePath string) (*Device, error) {
 }
 
 //
-// FindDevice ...
+// FindDevices ...
 //
-func FindDevice(query string) (string, error) {
+func FindDevices() []string {
 
-	device := ""
-	path := "/sys/class/input/event%d/device/name"
-	resolved := "/dev/input/event%d"
+	var devices []string
 
 	for i := 0; i < 255; i++ {
 		buff, err := ioutil.ReadFile(fmt.Sprintf(path, i))
 		if err != nil {
-			return device, err
+			continue
 		}
 
-		if strings.Contains(strings.ToLower(string(buff)), query) {
-			device = fmt.Sprintf(resolved, i)
-			return device, nil
+		if strings.Contains(strings.ToLower(string(buff)), "keyboard") {
+			devices = append(devices, fmt.Sprintf(resolved, i))
 		}
 	}
 
-	return device, nil
+	return devices
 }
 
 //
